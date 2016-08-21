@@ -17,13 +17,19 @@ def get_config_param( param, default, slidesfn ):
   cfn = os.path.join( os.path.expanduser('~'), '.HTMLSlideShowUtils', 'config.yaml' )
   if os.path.isfile( cfn ):
     with open(cfn,'r') as f:
-      config.update( yaml.load(f) )
+      dpath.util.merge( config, yaml.load(f) )
 
   # look for folder level config
   cfn = os.path.normpath( os.path.join( os.path.dirname(sys.argv[0] ), '..', 'config.yaml' ) )
   if os.path.isfile( cfn ):
     with open(cfn,'r') as f:
-      config.update( yaml.load(f) )
+      dpath.util.merge( config, yaml.load(f) )
+
+  # look for folder level config
+  cfn = 'config.yaml'
+  if os.path.isfile( cfn ):
+    with open(cfn,'r') as f:
+      dpath.util.merge( config, yaml.load(f) )
 
 
   # now get config in slides files
@@ -46,8 +52,7 @@ def get_config_param( param, default, slidesfn ):
     if in_config:
       config_lines.append(line)
 
-  config.update( yaml.load( "\n".join(config_lines) ) )
-
+  dpath.util.merge( config, yaml.load( "\n".join(config_lines) ) )
 
   try:
     return dpath.util.get( config, param )
