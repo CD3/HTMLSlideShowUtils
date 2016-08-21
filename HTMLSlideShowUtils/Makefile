@@ -39,6 +39,9 @@ slides:
 	cp -r $(UTILSDIR)/data/$(TO) html/data
 	if [ -x ./postprocessor ]; then  ./postprocessor; fi
 
+update-data:
+	cd $(UTILSDIR)/data/; ./update.sh
+
 push:
 	if [ -n "$(DEST)" ] ; then ssh $(NETLOC) "mkdir -p $(ROOT)/$(DEST)"; rsync -avzP --delete html/ $(PUSHURL); fi
 
