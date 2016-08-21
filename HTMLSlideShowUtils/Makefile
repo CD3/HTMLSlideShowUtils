@@ -1,7 +1,11 @@
-# FORMAT types: slidy, dzslides, slideous, reveal.js, s5
-FORMAT=slidy
+# TO types: slidy, dzslides, slideous, revealjs
+# Note: s5 not supported yet
+TO?=slidy
+TO=$(shell $(UTILSDIR)/scripts/get-config-param.py to --default slidy)
 
 UTILSDIR=../HTMLSlideShowUtils
+
+EXTRAPANDOCOPTS?=$(shell $(UTILSDIR)/scripts/get-extra-pandoc-opts.py $(TO))
 
 USER=$(shell $(UTILSDIR)/scripts/get-config-param.py push/user)
 HOST=$(shell $(UTILSDIR)/scripts/get-config-param.py push/host)
@@ -14,21 +18,26 @@ PUSHURL="$(NETLOC):$(ROOT)/$(DEST)"
 
 
 slides:
-	# this target should create a directory named html containing the presentation
-	# all pre and post processing should be done here
-	#
-	# we are using pandoc to do the conversion from markdown to html here.
-	$(UTILSDIR)/scripts/preprocess.py slides.md slides-processed.md
+	@# this target should create a directory named html containing the presentation
+	@# all pre and post processing should be done here
+	rm -rf html
+	cp slides.md slides-processed.md
+	if [ -x ./preprocessor ]; then  ./preprocessor; fi
+	$(UTILSDIR)/scripts/expand-macros.py slides-processed.md slides-processed.md
 	$(UTILSDIR)/scripts/make-images.py slides-processed.md
 	mkdir -p html
-	# note: --self-contained does not work with mathjax
-	# --standalone creates a file with header and footer
-	# --mathjax uses mathjax javascript to render latex equation. requires an internet connection
-	# --to is the format that will be written to
-	# --css is a css file to use
-	pandoc slides-processed.md -o html/00-slides.html --standalone --mathjax --to $(FORMAT) --css css/$(FORMAT).css
+	echo "to : $(TO)"
+	@#
+	@# we are using pandoc to do the conversion from markdown to html here.
+	@# note: --self-contained does not work with mathjax
+	@# --standalone creates a file with header and footer
+	@# --mathjax uses mathjax javascript to render latex equation. requires an internet connection
+	@# --to is the format that will be written to
+	pandoc slides-processed.md -o html/00-slides.html --standalone --mathjax --to $(TO) $(EXTRAPANDOCOPTS)
 	for file in $$($(UTILSDIR)/scripts/print-image-filenames.py slides-processed.md); do cp $$file html; done
-	cp -r $(UTILSDIR)/data/* html
+	if [ ! -d $(UTILSDIR)/data/$(TO) ]; then echo; echo; echo "ERROR: No data directory found for $(TO). Please run 'make update-data' and rerun."; echo; echo; fi
+	cp -r $(UTILSDIR)/data/$(TO) html/data
+	if [ -x ./postprocessor ]; then  ./postprocessor; fi
 
 push:
 	if [ -n "$(DEST)" ] ; then ssh $(NETLOC) "mkdir -p $(ROOT)/$(DEST)"; rsync -avzP --delete html/ $(PUSHURL); fi
@@ -37,14 +46,18 @@ all: slides push
 
 update: all
 
-test:
-	@echo "utils dir: $(UTILSDIR)"
-	@echo "push/user: $(USER)"
-	@echo "push/host: $(HOST)"
-	@echo "push/root: $(ROOT)"
-	@echo "push/dest: $(DEST)"
-	@echo "   netloc: $(NETLOC)"
-	@echo " push url: $(PUSHURL)"
+info:
+	@echo "      utils dir: $(UTILSDIR)"
+	@echo "             to: $(TO)"
+	@echo "ext pandoc opts: $(EXTRAPANDOCOPTS)"
+	@echo "      push/user: $(USER)"
+	@echo "      push/host: $(HOST)"
+	@echo "      push/root: $(ROOT)"
+	@echo "      push/dest: $(DEST)"
+	@echo "         netloc: $(NETLOC)"
+	@echo "       push url: $(PUSHURL)"
+	@echo "        preproc: $(shell if [ -x ./preprocessor  ]; then echo YES; else echo NO; fi)"
+	@echo "       postproc: $(shell if [ -x ./postprocessor ]; then echo YES; else echo NO; fi)"
 
 pngslides:
 	ls Slide*.PNG | sort -V | sed 's/^/# _\n![](/; s/$$/)\n/'

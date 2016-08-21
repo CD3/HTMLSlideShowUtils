@@ -21,7 +21,7 @@ $\nabla \times \vec{E} = -\frac{\partial \vec{B}}{\partial t}$
 
 $\nabla \times \vec{B} = \mu_0\left( \vec{J} + \epsilon_0\frac{\partial \vec{E}}{\partial t}\right)$
 
-The mathimg macro will create an image of some LaTeX code (using tex2im) and include it instead. This doesn't look as good as MathJax, but it allows you to use arbitrary LaTeX pacackages.
+The mathimg macro will create an image of some LaTeX code (using tex2im) and include it instead. This doesn't look as good as MathJax, but it allows you to use arbitrary LaTeX packages.
 
 \mathimg{g = \SI{9.8}{\meter\per\second\squared}}
 

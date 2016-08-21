@@ -1,4 +1,5 @@
 ---
+to : slidy
 push:
   user : username
   host : hostname

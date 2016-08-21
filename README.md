@@ -1,4 +1,4 @@
-# HTML Presentation Utilities
+# HTML Slide Show Utilities
 
 A collection of utilities for creating HTML slide shows from markdown using `pandoc`.
 
@@ -8,6 +8,12 @@ A collection of utilities for creating HTML slide shows from markdown using `pan
 a `Makefile` and some simple scripts to make this easy and add some useful features. For
 example, the `Makefile` supports pushing an HTML slide show to a remote server. To build
 and push a slide show, just run `make all`
+
+The scripts also handle differences between the various slide show frameworks that pandoc
+can write to so that you can create slide shows in each format from the same Markdown without
+modification. Most of these differences have to deal with the css and javascript links. Some
+of the output formats reference remote links (slidy) while others expect a specific
+directory structure with the needed files to be present (revealjs, slideous).
 
 ## Usage
 
