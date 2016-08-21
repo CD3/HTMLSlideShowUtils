@@ -25,7 +25,7 @@ class MacroProcessor(object):
     options = originalTextFor( nestedExpr( '[', ']' ) )
     arguments = originalTextFor( nestedExpr( '{', '}' ) )
 
-    self.macro = Combine( Literal("\\") + command("command") + ZeroOrMore(options)("options") + ZeroOrMore(arguments)("arguments") )
+    self.macro = Combine( WordStart("\\") + Literal("\\") + command("command") + ZeroOrMore(options)("options") + ZeroOrMore(arguments)("arguments") )
     self.macro.setParseAction( self.expand )
 
   def process(self,text,repeat=True):
@@ -59,16 +59,33 @@ class MacroProcessor(object):
     return replacement
 
   def command_mathimg(self,args,opts):
+    if len(args) < 1: # don't do anything if no argument was given
+      return None
 
     # create an image file of the equation using our tex2im
     if not hasattr(self,'mathimg_num'):
       self.mathimg_num = 0
     self.mathimg_num += 1
 
-    fn = "eq-%d.png"%self.mathimg_num
+    fn = "eq-%d.png"%(self.mathimg_num)
     cmd = "tex2im -o %s '%s' "%(fn,args[0])
     print "creating image of equation with:'"+cmd+"'"
     subprocess.call(cmd,shell=True)
+
+
+    size=None
+    if len(opts) > 0:
+      oo = [ o.strip() for o in opts[0].split(',')]
+      for o in oo:
+        k,v = o.split('=')
+        k = k.strip()
+        v = v.strip()
+        if k == 'size':
+          size = v.strip('"')
+          
+
+    if size:
+      fn = "eq-%d_%s.png"%(self.mathimg_num,size)
 
     # now replace the macro with markdown that points at the image
     md = '![](%s)'%fn
