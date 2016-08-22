@@ -26,7 +26,6 @@ slides:
 	$(UTILSDIR)/scripts/expand-macros.py slides-processed.md slides-processed.md
 	$(UTILSDIR)/scripts/make-images.py slides-processed.md
 	mkdir -p html
-	echo "to : $(TO)"
 	@#
 	@# we are using pandoc to do the conversion from markdown to html here.
 	@# note: --self-contained does not work with mathjax
@@ -63,7 +62,10 @@ info:
 	@echo "       postproc: $(shell if [ -x ./postprocessor ]; then echo YES; else echo NO; fi)"
 
 pngslides:
-	ls Slide*.PNG | sort -V | sed 's/^/# _\n![](/; s/$$/)\n/'
+	@ls [sS]lide*.png | sort -V | sed 's/^/# _\n![](/; s/$$/)\n/'
+
+pdf2png:
+	convert slides.pdf Slides.png
 
 clean:
 	rm -rf html
