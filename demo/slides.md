@@ -39,11 +39,11 @@ You can also make the image larger, which is not possible with MathJax.
 
 For example, this
 
-\\mathimg[size="700x300"]{\\Delta E = \\delta Q + \\delta W}
+\\mathimg[height="300"]{\\Delta E = \\delta Q + \\delta W}
 
 will produce this
 
-\mathimg[size="700x300"]{\Delta E = \delta Q + \delta W}
+\mathimg[height="300"]{\Delta E = \delta Q + \delta W}
 
 
 # Shell

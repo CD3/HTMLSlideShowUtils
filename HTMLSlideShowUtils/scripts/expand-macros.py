@@ -9,6 +9,9 @@ from pyparsing import *
 from wand.image import Image
 from wand.display import display
 
+# local modules
+import options as op
+
 try:
   # support for user defined macro handlers
   import macros
@@ -73,19 +76,18 @@ class MacroProcessor(object):
     subprocess.call(cmd,shell=True)
 
 
-    size=None
-    if len(opts) > 0:
-      oo = [ o.strip() for o in opts[0].split(',')]
-      for o in oo:
-        k,v = o.split('=')
-        k = k.strip()
-        v = v.strip()
-        if k == 'size':
-          size = v.strip('"')
-          
+    options = op.parse_options_str( opts )
 
-    if size:
-      fn = "eq-%d_%s.png"%(self.mathimg_num,size)
+
+    size = None
+    if len(options) > 0:
+      if 'size' in options[0]:
+        size = options[0]['size']
+      else:
+        size = '{width}x{height}'.format( width=options[0].get('width','W'), height=options[0].get('height','H') )
+          
+      if size:
+        fn = "eq-%d_%s.png"%(self.mathimg_num,size)
 
     # now replace the macro with markdown that points at the image
     md = '![](%s)'%fn
