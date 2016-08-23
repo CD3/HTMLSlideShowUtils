@@ -23,7 +23,7 @@ $\nabla \times \vec{B} = \mu_0\left( \vec{J} + \epsilon_0\frac{\partial \vec{E}}
 
 The `\mathimg` macro will create an image of some LaTeX code (using
 [tex2im](https://github.com/CD3/tex2im)) and include it instead. 
-For example:\mathimg{\sin(x) = \int \cos(x) dx}. This doesn't
+For example:![](eq-1.png). This doesn't
 look as good as MathJax for inline math, but it allows you to use arbitrary LaTeX packages.
 
 For example, this
@@ -32,7 +32,7 @@ For example, this
 
 will produce this
 
-\mathimg{g = \SI{9.8}{\meter\per\second\squared}}
+![](eq-2.png)
 
 Since MathJax does not support the `siunitx`, this is the only way to use the \SI command.
 You can also make the image larger, which is not possible with MathJax.
@@ -43,7 +43,7 @@ For example, this
 
 will produce this
 
-\mathimg[height="300"]{\Delta E = \delta Q + \delta W}
+![](eq-3_Wx300.png)
 
 
 # Shell
@@ -52,6 +52,18 @@ The `shell` macro will run a command and include its output.
 
 ```
 > ls
-\shell{ls}
+eq-1.png
+eq-2.png
+eq-3_500x500.png
+eq-3_700x300.png
+eq-3_700x500.png
+eq-3.png
+eq-3_Wx300.png
+Makefile
+postprocessor
+preprocessor
+slides.md
+slides-processed.md
+
 ```
 
