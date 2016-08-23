@@ -65,7 +65,7 @@ info:
 	@echo "       postproc: $(shell if [ -x ./postprocessor ]; then echo YES; else echo NO; fi)"
 
 pngslides:
-	@ls [sS]lide*.png | sort -V | sed 's/^/# _\n![](/; s/$$/)\n/'
+	@find ./ -maxdepth 1 -iname 'slide*.png' | sort -V | sed 's/^/# _\n![](/; s/$$/)\n/'
 
 pdf2png:
 	convert slides.pdf Slides.png
