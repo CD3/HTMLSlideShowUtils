@@ -3,6 +3,7 @@ push:
   user : username
   host : hostname
   root : public_html
+  netloc : direct
   dest : slides/HTMLpresentations-demo
 
 title  : HTML Presentations

@@ -11,8 +11,11 @@ USER=$(shell $(UTILSDIR)/scripts/get-config-param.py push/user)
 HOST=$(shell $(UTILSDIR)/scripts/get-config-param.py push/host)
 ROOT=$(shell $(UTILSDIR)/scripts/get-config-param.py push/root)
 DEST=$(shell $(UTILSDIR)/scripts/get-config-param.py push/dest)
+NETLOC=$(shell $(UTILSDIR)/scripts/get-config-param.py push/netloc)
 
-NETLOC=$(USER)@$(HOST)
+ifeq ($(NETLOC),None)
+	NETLOC=$(USER)@$(HOST)
+endif
 
 PUSHURL="$(NETLOC):$(ROOT)/$(DEST)"
 
