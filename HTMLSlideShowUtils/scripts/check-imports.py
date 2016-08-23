@@ -33,6 +33,7 @@ if __name__ == "__main__":
 
 
   for module in missing_modules:
-    print module
+    if module not in local_modules:
+      print module
   
   
