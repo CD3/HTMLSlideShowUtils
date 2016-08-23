@@ -1,12 +1,24 @@
 #! /bin/bash
 
-dir=$(dirname $0)
+# run the setup script in the origin directory if it exists.
+origin="%ORIGIN%"
+
+if [ -x $origin/setup.sh ]
+then
+  echo "Running setup.sh script in $origin."
+  $origin/setup.sh
+  exit 1
+fi
+
+src=$(dirname $0)
 
 echo -n "Copying utilities..."
-cp $dir/HTMLSlideShowUtils ./ -r
-cp $dir/demo/slides.md ./ -r
-ln -s HTMLSlideShowUtils/README.md ./
-ln -s HTMLSlideShowUtils/Makefile ./
+cp $src/HTMLSlideShowUtils ./ -r
+cp $src/demo/slides.md ./ -r
+cp $src/setup.sh ./
+sed -i "/origin=/ s|%ORIGIN%|$src|" ./setup.sh
+[ ! -h README.md ] && ln -s HTMLSlideShowUtils/README.md ./
+[ ! -h Makefile ] && ln -s HTMLSlideShowUtils/Makefile ./
 echo "done"
 
 echo -n "Checking dependencies..."
