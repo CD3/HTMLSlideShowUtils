@@ -47,6 +47,10 @@ update-data:
 push:
 	if [ -n "$(DEST)" ] ; then ssh $(NETLOC) "mkdir -p $(ROOT)/$(DEST)"; rsync -avzP --delete html/ $(PUSHURL); fi
 
+clean:
+	rm -rf html
+	if [ -n "$(DEST)" ]; then ssh $(NETLOC) "rm -rf $(ROOT)/$(DEST)"; fi
+
 all: slides push
 
 update: all
@@ -70,6 +74,17 @@ pngslides:
 pdf2png:
 	convert slides.pdf Slides.png
 
-clean:
-	rm -rf html
-	if [ -n "$(DEST)" ]; then ssh $(NETLOC) "rm -rf $(ROOT)/$(DEST)"; fi
+NAME?=NewPresentation
+new-show:
+	mkdir $(NAME)
+	cd $(NAME); ln -s ../Makefile
+	@echo "---"                                                                          >  $(NAME)/slides.md
+	@echo "push:"                                                                        >> $(NAME)/slides.md
+	@echo "  netloc: fixme  # an rsync style remote url to push to"                      >> $(NAME)/slides.md
+	@echo "  dest: fixme  # name of directory to put presentation into under the netloc" >> $(NAME)/slides.md
+	@echo "title: fixme"                                                                 >> $(NAME)/slides.md
+	@echo "subtitle: fixme"                                                              >> $(NAME)/slides.md
+	@echo "author: fixme"                                                                >> $(NAME)/slides.md
+	@echo "---"                                                                          >> $(NAME)/slides.md
+	@echo "# Slide 1 Title"                                                              >> $(NAME)/slides.md
+	@echo "This is (one of) Einstein's equation: $$E = mc^2$$"                           >> $(NAME)/slides.md
