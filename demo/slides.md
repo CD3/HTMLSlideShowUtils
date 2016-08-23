@@ -22,9 +22,15 @@ $\nabla \times \vec{E} = -\frac{\partial \vec{B}}{\partial t}$
 
 $\nabla \times \vec{B} = \mu_0\left( \vec{J} + \epsilon_0\frac{\partial \vec{E}}{\partial t}\right)$
 
+This looks pretty good, but it is not a LaTeX compiler, so LaTeX packages are not supported.
+
+# Math
+
 The `\mathimg` macro will create an image of some LaTeX code (using
-[tex2im](https://github.com/CD3/tex2im)) and include it instead. 
-For example:\mathimg{\sin(x) = \int \cos(x) dx}. This doesn't
+[tex2im](https://github.com/CD3/tex2im)) and include it instead (if `tex2im` is not
+installed it will replace the macro with a standard `$...$`).
+
+For example: \mathimg{\sin(x) = \int \cos(x) dx}. This doesn't
 look as good as MathJax for inline math, but it allows you to use arbitrary LaTeX packages.
 
 For example, this
@@ -47,9 +53,21 @@ will produce this
 \mathimg[height="300"]{\Delta E = \delta Q + \delta W}
 
 
+
 # Shell
 
-The `shell` macro will run a command and include its output.
+The `\\shell` macro will run a command and include its output. This is useful for command line demonstration.
+for example, this
+
+\`\`\`
+
+\> ls
+
+\\shell{ls}
+
+\`\`\`
+
+will produce this
 
 ```
 > ls

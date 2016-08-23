@@ -14,11 +14,15 @@ src=$(dirname $0)
 
 echo -n "Copying utilities..."
 cp $src/HTMLSlideShowUtils ./ -r
-cp $src/demo/slides.md ./ -r
+[ -d demo ] && rm -rf demo
+cp $src/demo ./ -r
+echo "DO NOT PUT ANYTHING IN THIS DIRECTORY YOU WANT TO KEEP" > demo/WARNING.txt
+echo "It will be erased if the setup script is ever run again" >> demo/WARNING.txt
 cp $src/setup.sh ./
 sed -i "/origin=/ s|%ORIGIN%|$src|" ./setup.sh
 [ ! -h README.md ] && ln -s HTMLSlideShowUtils/README.md ./
-[ ! -h Makefile ] && ln -s HTMLSlideShowUtils/Makefile ./
+[ ! -h Makefile ]  && ln -s HTMLSlideShowUtils/Makefile ./
+[ ! -h slides.sd ] && ln -s demo/slides.sd ./
 echo "done"
 
 echo -n "Checking dependencies..."

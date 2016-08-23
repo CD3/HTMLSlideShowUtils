@@ -73,11 +73,15 @@ class MacroProcessor(object):
     fn = "eq-%d.png"%(self.mathimg_num)
     cmd = "tex2im -o %s '%s' "%(fn,args[0])
     print "creating image of equation with:'"+cmd+"'"
-    subprocess.call(cmd,shell=True)
+    with tempfile.TemporaryFile() as f:
+      status = subprocess.call(cmd,shell=True,stdout=f,stderr=f)
+      if status != 0:
+        print "\tWARNING: there was a problem running tex2im."
+        print "\tWARNING: replacing with $...$, which may not work..."
+        return "$"+args[0]+"$"
 
 
     options = op.parse_options_str( opts )
-
 
     size = None
     if len(options) > 0:

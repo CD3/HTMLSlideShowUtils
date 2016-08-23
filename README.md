@@ -17,20 +17,28 @@ directory structure with the needed files to be present (revealjs, slideous).
 
 ## Usage
 
-To get started, create a directory for your presentations and run the `setup.sh` from
-inside. The `setup.sh` script will copy the utilities into the directory.
+To get started, create a directory for your presentations, run the `setup.sh` in this directory,
+and build the demo.
 
     > mkdir presentations
     > cd presentations
     > /path/to/this/dir/setup.sh
-    > mkdir presentation-1
-    > cd presentation-1
-    > ln -s ../Makefile
-    > cp ../slides.md ./
+    > cd demo
     > make
     > firefox html/00-slides.html
 
 This will build the example demo presentation.
+
+To create your own presentation, you just need to create a new directory and link to the `Makefile`. Then
+write you slides in a file named `slides.md`
+
+
+    > mkdir myPres
+    > cd myPres
+    > ln -s ../Makefile ./
+    > # create slides.md
+    > make
+
 
 The `Makefile` is compatible with [`live-edit`](https://github.com/CD3/live-edit). To
 automatically build and push your presentation on writes, edit the slides file with `live-edit`
