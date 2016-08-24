@@ -29,11 +29,15 @@ echo -n "Checking dependencies..."
 
 if ! hash pandoc > /dev/null 2>&1
 then
-  echo "pandoc is required, but is not installed"
+  echo
+  echo
+  echo "'pandoc' is required, but is not installed."
+  echo "Please install it before building your presentation."
+  echo
 fi
 
 
-missing_modules=$(HTMLSlideShowUtils/scripts/check-imports.py HTMLSlideShowUtils/scripts/* | grep -v 'macros')
+missing_modules=$(HTMLSlideShowUtils/scripts/check-imports.py HTMLSlideShowUtils/scripts/*.py | sort | uniq | grep -v 'macros')
 if [ -n "${missing_modules}" ]
 then
 echo "These python modules are needed, but not installed"
