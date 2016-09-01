@@ -2,7 +2,7 @@
 '''Preprocess a markdown file by doing macro expansion an other things.'''
 
 # standard modules
-import sys, os, re, subprocess, argparse, tempfile
+import sys, os, re, subprocess, argparse, tempfile, urlparse, urllib
 
 # non-standard modules
 from pyparsing import *
@@ -70,8 +70,13 @@ class MacroProcessor(object):
       self.mathimg_num = 0
     self.mathimg_num += 1
 
+    extra_opts=""
+    if len(opts) > 1:
+      extra_opts = opts[1]
+
+
     fn = "eq-%d.png"%(self.mathimg_num)
-    cmd = "tex2im -o %s '%s' "%(fn,args[0])
+    cmd = "tex2im -o %s %s '%s' "%(fn,extra_opts,args[0])
     print "creating image of equation with:'"+cmd+"'"
     with tempfile.TemporaryFile() as f:
       status = subprocess.call(cmd,shell=True,stdout=f,stderr=f)
@@ -94,11 +99,53 @@ class MacroProcessor(object):
         fn = "eq-%d_%s.png"%(self.mathimg_num,size)
 
     # now replace the macro with markdown that points at the image
-    md = '![](%s)'%fn
+    md = '![](./%s)'%fn
 
     return md
 
+  def command_image(self,args,opts):
 
+    fn = args[0]
+    options = op.parse_options_str( opts )
+
+    url = urlparse.urlparse(fn)
+    if url.scheme == '':
+      url = url._replace(scheme='file')
+
+    if url.scheme == 'file':
+      fn = os.path.join( os.getcwd(), fn)
+      fn = os.path.normpath(fn)
+      if not os.path.isfile( fn ):
+        raise RuntimeError("ERROR: could not find image file '%s'." % fn )
+      url = url._replace(path=fn)
+
+    lfn = os.path.basename(url.path)
+    url = url.geturl()
+
+    # get size from options
+    size = None
+    if len(options) > 0:
+      if 'size' in options[0]:
+        size = options[0]['size']
+      else:
+        size = '{width}x{height}'.format( width=options[0].get('width','W'), height=options[0].get('height','H') )
+          
+      if size:
+        n,e = os.path.splitext(lfn)
+        lfn = "%s_%s%s"%(n,size,e)
+
+
+    if fn != lfn:
+      # download the image
+      with open(lfn,'wb') as lf:
+        f = urllib.urlopen(url)
+        lf.write(f.read())
+        f.close()
+
+    return '![](./%s)'%lfn
+
+
+  command_includegraphics = command_image
 
 
   def command_shell(self,args,opts):
