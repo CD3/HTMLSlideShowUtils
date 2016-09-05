@@ -1,9 +1,12 @@
 # TO types: slidy, dzslides, slideous, revealjs
 # Note: s5 not supported yet
+
+# we are assuming that each presentation is in its own sub-directory
+UTILSDIR=../HTMLSlideShowUtils
+
 TO?=slidy
 TO=$(shell $(UTILSDIR)/scripts/get-config-param.py to --default slidy)
 
-UTILSDIR=../HTMLSlideShowUtils
 
 EXTRAPANDOCOPTS?=$(shell $(UTILSDIR)/scripts/get-extra-pandoc-opts.py $(TO))
 
@@ -37,7 +40,7 @@ slides:
 	@# --to is the format that will be written to
 	pandoc slides-processed.md -o html/00-slides.html --standalone --mathjax --to $(TO) $(EXTRAPANDOCOPTS)
 	for file in $$($(UTILSDIR)/scripts/print-image-filenames.py slides-processed.md); do cp $$file html; done
-	if [ ! -d $(UTILSDIR)/data/$(TO) ]; then echo; echo; echo "ERROR: No data directory found for $(TO). Please run 'make update-data' and rerun."; echo; echo; fi
+	@if [ ! -d $(UTILSDIR)/data/$(TO) ]; then echo; echo; echo "ERROR: No data directory found for $(TO). Please run 'make update-data' and rerun."; echo; echo; fi
 	cp -r $(UTILSDIR)/data/$(TO) html/data
 	if [ -x ./postprocessor ]; then  ./postprocessor; fi
 
