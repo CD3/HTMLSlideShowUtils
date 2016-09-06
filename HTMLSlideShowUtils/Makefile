@@ -80,14 +80,4 @@ pdf2png:
 NAME?=NewPresentation
 new-show:
 	mkdir $(NAME)
-	cd $(NAME); ln -s ../Makefile
-	@echo "---"                                                                          >  $(NAME)/slides.md
-	@echo "push:"                                                                        >> $(NAME)/slides.md
-	@echo "  netloc: fixme  # an rsync style remote url to push to"                      >> $(NAME)/slides.md
-	@echo "  dest: fixme  # name of directory to put presentation into under the netloc" >> $(NAME)/slides.md
-	@echo "title: fixme"                                                                 >> $(NAME)/slides.md
-	@echo "subtitle: fixme"                                                              >> $(NAME)/slides.md
-	@echo "author: fixme"                                                                >> $(NAME)/slides.md
-	@echo "---"                                                                          >> $(NAME)/slides.md
-	@echo "# Slide 1 Title"                                                              >> $(NAME)/slides.md
-	@echo "This is (one of) Einstein's equation: $$E = mc^2$$"                           >> $(NAME)/slides.md
+	cd $(NAME); ln -s ../Makefile; cp ../demo/slides.md ./

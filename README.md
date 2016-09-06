@@ -1,6 +1,6 @@
 # HTML Slide Show Utilities
 
-A collection of utilities for creating HTML slide shows from markdown using `pandoc`.
+A collection of utilities for creating HTML slide shows from markdown using Pandoc.
 
 ## Description
 
@@ -49,3 +49,33 @@ The `Makefile` is compatible with [`live-edit`](https://github.com/CD3/live-edit
 automatically build and push your presentation on writes, edit the slides file with `live-edit`
 
     > live-edit slides.md  # make update is called each time slides.md is saved.
+
+## FAQ
+
+### Why is this better than PowerPoint?
+
+Honestly, for most people it isn't.
+Before this, I was using PowerPoint,
+and do not really have a problem with anything PowerPoint does in terms of creating and giving a presentation.
+It is even possible to get true LaTeX support with the IguanaTex add-in, and I certainly like it better
+than the OpenOffice/LiebreOffice presentation software.
+
+This project grew out of a frustration with editing presentations. Specifically the fact that *all* editing must
+go through the PowerPoint interface. So, if I want to make a change to a presentation, I have to have a copy of
+PowerPoint on my computer, I have to open it up, and I have to click around. Then, if I want to make my presentation
+available to others without requiring PowerPoint (to students for example), I have to do some more clicking to
+export the slides to PDF. Any time I make a change, I have to do this.
+
+So I wanted something that was more flexible, and could be automated. I started looking around, and after about
+a year of testing out different solutions, I ended up here.
+
+### Why is this better than [madoko](https://www.madoko.net/)
+
+Madoko is actually the first tool I used to create HTML slides, and it works pretty well. It is defiantly better
+than PowerPoint in terms of flexibility. You write your presentation in plain text using Markdown and Madoko
+turns it into an HTML file that you can then view in any web browser. Using Markdown is great because it is simple
+and easy to read. So Madoko does all the hard work of getting this turned into a javascript driven slide show.
+
+In the end, there were a few quirks that are probably more reveal.js than madoko that caused me to look for alternatives.
+Once tried Pandoc, I found that it could basically do everything I liked about madoko and more.
+
