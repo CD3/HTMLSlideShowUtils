@@ -6,8 +6,6 @@ import sys, os, re, subprocess, argparse, tempfile, urlparse, urllib
 
 # non-standard modules
 from pyparsing import *
-from wand.image import Image
-from wand.display import display
 
 # local modules
 import options as op
@@ -62,6 +60,8 @@ class MacroProcessor(object):
     return replacement
 
   def command_mathimg(self,args,opts):
+    '''Create an image from LaTeX code and include it.'''
+
     if len(args) < 1: # don't do anything if no argument was given
       return None
 
@@ -75,13 +75,15 @@ class MacroProcessor(object):
       extra_opts = opts[1]
 
 
-    fn = "eq-%d.png"%(self.mathimg_num)
-    cmd = "tex2im -o %s %s '%s' "%(fn,extra_opts,args[0])
+    ifn = "eq-%d.png"%(self.mathimg_num)
+    ofn = "eq-%d.log"%(self.mathimg_num)
+    cmd = "tex2im -o %s %s '%s' "%(ifn,extra_opts,args[0])
     print "creating image of equation with:'"+cmd+"'"
-    with tempfile.TemporaryFile() as f:
+    with open(ofn,'w') as f:
       status = subprocess.call(cmd,shell=True,stdout=f,stderr=f)
       if status != 0:
         print "\tWARNING: there was a problem running tex2im."
+        print "\tWARNING: command output was left in %s"%(ofn)
         print "\tWARNING: replacing with $...$, which may not work..."
         return "$"+args[0]+"$"
 
@@ -96,15 +98,65 @@ class MacroProcessor(object):
         size = '{width}x{height}'.format( width=options[0].get('width','W'), height=options[0].get('height','H') )
           
       if size:
-        fn = "eq-%d_%s.png"%(self.mathimg_num,size)
+        ifn = "eq-%d_%s.png"%(self.mathimg_num,size)
 
     # now replace the macro with markdown that points at the image
-    md = '![](./%s)'%fn
+    md = '![](./%s)'%ifn
+
+    return md
+
+  def command_scriptimg(self,args,opts):
+    '''Create an image from a script and include it.'''
+
+    if len(args) < 1: # don't do anything if no argument was given
+      return None
+
+    # create an image file of the equation using our tex2im
+    if not hasattr(self,'scriptimg_num'):
+      self.scriptimg_num = 0
+    self.scriptimg_num += 1
+
+    extra_opts=""
+    if len(opts) > 1:
+      extra_opts = opts[1]
+
+
+    sfn = "sc-%d.txt"%(self.scriptimg_num)
+    ifn = "sc-%d.png"%(self.scriptimg_num)
+    ofn = "sc-%d.log"%(self.scriptimg_num)
+
+    with open(sfn,'w') as f:
+      f.write(re.sub( "^\s*#","#",args[0] ) )
+
+    cmd = "chmod +x %s; ./%s; mv out.png %s"%(sfn,sfn,ifn)
+    print "creating image from script with:'"+cmd+"'"
+    with open(ofn,'w') as f:
+      status = subprocess.call(cmd,shell=True,stdout=f,stderr=f)
+      if status != 0:
+        print "\tWARNING: there was a problem running script."
+        print "\tWARNING: the script and its output were left in %s and %s"%(sfn,ofn)
+        return "ERROR: could not create image"
+
+
+    options = op.parse_options_str( opts )
+
+    size = None
+    if len(options) > 0:
+      if 'size' in options[0]:
+        size = options[0]['size']
+      else:
+        size = '{width}x{height}'.format( width=options[0].get('width','W'), height=options[0].get('height','H') )
+          
+      if size:
+        ifn = "sc-%d_%s.png"%(self.scriptimg_num,size)
+
+    # now replace the macro with markdown that points at the image
+    md = '![](./%s)'%ifn
 
     return md
 
   def command_image(self,args,opts):
-
+    '''Insert a (possibly remote) image.'''
     fn = args[0]
     options = op.parse_options_str( opts )
 
@@ -157,6 +209,7 @@ class MacroProcessor(object):
       stdout = fp.read()
 
     return stdout
+
 
 
 if __name__ == "__main__":

@@ -50,6 +50,48 @@ automatically build and push your presentation on writes, edit the slides file w
 
     > live-edit slides.md  # make update is called each time slides.md is saved.
 
+### Macros
+
+Macros provide a mechanism to extend Markup un-intrusively. The `Makefile` that builds the slide show first creates a copy of `slides.md` named `slides-processed.md` and
+then runs a series of commands that may modify this file. The modified file is then compiled by `pandoc` into an HTML slide show. This allows for some preprocessing to occur
+before `pandoc` is run. One of the preprocessing steps that will be performed is macro expansion.
+
+Macros follow the LaTeX command syntax: `\commandname[options]{arguments}`. The `expand-macros.py` script will read `slides-processed.md` and attempt to expand any macros that it
+find. Unrecognized macros are left in place. The script provides several useful macros.
+
+`\mathimg{latex snippet}`
+: Create an image file (png) from a LaTeX snippet and include the image in the slide. This macro uses [`tex2im`](https://github.com/CD3/tex2im) to create a png of the LaTeX snippet.
+  Use of arbitrary LaTeX packages are supported, but must `tex2im` must be configured to include them.
+
+`\scriptimg{script text}`
+: Run a script to create an image file (png) and include the image into the slide. The script text should include the shebang and the script should create a file named `out.png` which will be renamed after the script is ran.
+  This macro writes the script to a text file, makes the file executable, runs the file, and then moves `out.png` to a unique filename that is included into the slide.
+
+`\image{image url}`
+: This macro is similar to the markdown \!\[\](imagename) command, except that it accepts remote image urls. The image will be downloaded and included in the slide.
+
+`\shell{shell command}`
+: Run a shell command and include its output. This macro lets you insert the output of a shell command into the slide, which is useful for presentations on command line applications.
+
+
+In addition to these, user defined macros can be created. In order to create a new macro, or overload an existing macro, you just need to write python functions that will perform the macro
+expansion in a file named `macros.py`. If this file exits, `expand-macros.py` will load all of the functions defined in it and use them to expand macros. The function signature should be
+
+```
+ def macroname(self, opts, args):
+   ...
+
+   return str
+```
+
+The function should return a string that will replace the macro.
+The instance of the macro expansion class that is performing the macro expansion is passed into the first argument `self`. This gives you access to the members of the class, but is currently undocumented.
+However, you can use `self` to save state information between macro calls, for example to keep track of how many times the macro was expanded. The second and third argument will be lists that contain the
+contents of the square and curly brackets of the macro. Multiple `[]` and `{}` can be given, for example `\macroname[option1="true"][option2="true"]{argument}`. So opts[0] will be the contents of the first set of
+square brackets. The function that performs the macro expansion is responsible for parsing all options and arguments, so the example given could be implemented as `\macroname[option1="true",option2="true"]{argument}`, but
+the function that does the expansion would be responsible for parsing the ',' into two separate options.
+
+
 ## FAQ
 
 ### Why is this better than PowerPoint?
