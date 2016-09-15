@@ -78,7 +78,7 @@ In addition to these, user defined macros can be created. In order to create a n
 expansion in a file named `macros.py`. If this file exits, `expand-macros.py` will load all of the functions defined in it and use them to expand macros. The function signature should be
 
 ```
- def macroname(self, opts, args):
+ def macroname(self, args, opts):
    ...
 
    return str
@@ -119,5 +119,5 @@ turns it into an HTML file that you can then view in any web browser. Using Mark
 and easy to read. So Madoko does all the hard work of getting this turned into a javascript driven slide show.
 
 In the end, there were a few quirks that are probably more reveal.js than madoko that caused me to look for alternatives.
-Once tried Pandoc, I found that it could basically do everything I liked about madoko and more.
+Once I tried Pandoc, I found that it could basically do everything I liked about madoko and more.
 
