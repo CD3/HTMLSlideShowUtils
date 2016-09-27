@@ -2,11 +2,17 @@
 # Note: s5 not supported yet
 
 # we are assuming that each presentation is in its own sub-directory
-UTILSDIR=../HTMLSlideShowUtils
+UTILSDIR=$(wildcard HTMLSlideShowUtils)
+ifeq ($(strip $(UTILSDIR)),)
+UTILSDIR=$(wildcard ../HTMLSlideShowUtils)
+endif
+ifeq ($(strip $(UTILSDIR)),)
+UTILSDIR=COULD_NOT_FIND_UTILS_DIR
+endif
 
 TO?=slidy
+ifneq ($(strip $(UTILSDIR)),COULD_NOT_FIND_UTILS_DIR)
 TO=$(shell $(UTILSDIR)/scripts/get-config-param.py to --default slidy)
-
 
 EXTRAPANDOCOPTS?=$(shell $(UTILSDIR)/scripts/get-extra-pandoc-opts.py $(TO))
 
@@ -15,6 +21,7 @@ HOST=$(shell $(UTILSDIR)/scripts/get-config-param.py push/host)
 ROOT=$(shell $(UTILSDIR)/scripts/get-config-param.py push/root)
 DEST=$(shell $(UTILSDIR)/scripts/get-config-param.py push/dest)
 NETLOC=$(shell $(UTILSDIR)/scripts/get-config-param.py push/netloc)
+endif
 
 ifeq ($(NETLOC),None)
 	NETLOC=$(USER)@$(HOST)
@@ -42,6 +49,16 @@ slides:
 	for file in $$($(UTILSDIR)/scripts/print-image-filenames.py slides-processed.md); do cp $$file html; done
 	@if [ ! -d $(UTILSDIR)/data/$(TO) ]; then echo; echo; echo "ERROR: No data directory found for $(TO). Please run 'make update-data' and rerun."; echo; echo; fi
 	cp -r $(UTILSDIR)/data/$(TO) html/data
+	if [ -x ./postprocessor ]; then  ./postprocessor; fi
+
+
+# support for building PDFs too.
+document:
+	cp document.md document-processed.md
+	if [ -x ./preprocessor ]; then  ./preprocessor; fi
+	$(UTILSDIR)/scripts/expand-macros.py slides-processed.md slides-processed.md
+	$(UTILSDIR)/scripts/make-images.py slides-processed.md
+	pandoc document-processed.md -o document.pdf
 	if [ -x ./postprocessor ]; then  ./postprocessor; fi
 
 update-data:

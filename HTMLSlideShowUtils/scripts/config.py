@@ -34,7 +34,7 @@ def get_config_param( param, default, slidesfn ):
 
   # now get config in slides files
   text = ""
-  if slidesfn:
+  if os.path.isfile( slidesfn ):
     with open(slidesfn,'r') as f:
       text = f.read()
   
