@@ -210,6 +210,28 @@ class MacroProcessor(object):
 
     return stdout
 
+  def command_write(self,args,opts):
+    '''Write text to a file. Useful for creating "library" scripts for the scriptimg command.'''
+
+    if len(args) < 1: # don't do anything if no argument was given
+      return None
+
+    fn = None
+    options = op.parse_options_str( opts )
+    if len(options) > 0:
+      if 'filename' in options[0]:
+        fn = options[0]['filename']
+
+    if fn is None:
+      print "\tWARNING: no filename found in write macro."
+      print '\tWARNING: please specify a filename in the macro options with [filename="NAME"], where NAME is the name of the file to write.'
+      return None
+
+    with open(fn,'w') as f:
+      f.write(args[0])
+
+    return ""
+
 
 
 if __name__ == "__main__":
