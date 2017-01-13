@@ -15,6 +15,7 @@ ifneq ($(strip $(UTILSDIR)),COULD_NOT_FIND_UTILS_DIR)
 TO=$(shell $(UTILSDIR)/scripts/get-config-param.py to --default slidy)
 
 EXTRAPANDOCOPTS?=$(shell $(UTILSDIR)/scripts/get-extra-pandoc-opts.py $(TO))
+EXTRARSYNCOPTS?=$(shell $(UTILSDIR)/scripts/get-config-param.py extra-rsync-opts --default '')
 
 USER=$(shell $(UTILSDIR)/scripts/get-config-param.py push/user)
 HOST=$(shell $(UTILSDIR)/scripts/get-config-param.py push/host)
@@ -37,7 +38,7 @@ slides:
 	cp slides.md slides-processed.md
 	if [ -x ./preprocessor ]; then  ./preprocessor; fi
 	$(UTILSDIR)/scripts/expand-macros.py slides-processed.md slides-processed.md
-	$(UTILSDIR)/scripts/make-images.py slides-processed.md
+	$(UTILSDIR)/scripts/make-images.py -s slides-processed.md
 	mkdir -p html
 	@#
 	@# we are using pandoc to do the conversion from markdown to html here.
@@ -57,7 +58,7 @@ document:
 	cp document.md document-processed.md
 	if [ -x ./preprocessor ]; then  ./preprocessor; fi
 	$(UTILSDIR)/scripts/expand-macros.py slides-processed.md slides-processed.md
-	$(UTILSDIR)/scripts/make-images.py slides-processed.md
+	$(UTILSDIR)/scripts/make-images.py -s slides-processed.md
 	pandoc document-processed.md -o document.pdf
 	if [ -x ./postprocessor ]; then  ./postprocessor; fi
 
@@ -65,7 +66,7 @@ update-data:
 	cd $(UTILSDIR)/data/; ./update.sh
 
 push:
-	if [ -n "$(DEST)" ] ; then ssh $(NETLOC) "mkdir -p $(ROOT)/$(DEST)"; rsync -avzP --delete html/ $(PUSHURL); fi
+	if [ -n "$(DEST)" ] ; then ssh $(NETLOC) "mkdir -p $(ROOT)/$(DEST)"; rsync -avzP --delete $(EXTRARSYNCOPTS) html/ $(PUSHURL); fi
 
 clean:
 	rm -rf html
@@ -79,6 +80,7 @@ info:
 	@echo "      utils dir: $(UTILSDIR)"
 	@echo "             to: $(TO)"
 	@echo "ext pandoc opts: $(EXTRAPANDOCOPTS)"
+	@echo " ext rsync opts: $(EXTRARSYNCOPTS)"
 	@echo "      push/user: $(USER)"
 	@echo "      push/host: $(HOST)"
 	@echo "      push/root: $(ROOT)"

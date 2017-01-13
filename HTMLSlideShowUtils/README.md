@@ -17,5 +17,5 @@ settings in the YAML metadata section.
 
 
 The 'root' and 'dest' setting will be concatenated. This is useful if your webserver serves
-out of some directory, such as public_html. You can set the root directory one, and then
-just change the dest directory for each presentation.
+out of some directory, such as public_html. You can set the `root` directory once, and then
+just change the `dest` directory for each presentation.

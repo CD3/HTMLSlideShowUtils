@@ -22,7 +22,7 @@ cp $src/setup.sh ./
 sed -i "/origin=/ s|%ORIGIN%|$src|" ./setup.sh
 [ ! -h README.md ] && ln -s HTMLSlideShowUtils/README.md ./
 [ ! -h Makefile ]  && ln -s HTMLSlideShowUtils/Makefile ./
-[ ! -h slides.sd ] && ln -s demo/slides.sd ./
+[ ! -h slides.md ] && ln -s demo/slides.md ./
 echo "done"
 
 echo -n "Checking dependencies..."
