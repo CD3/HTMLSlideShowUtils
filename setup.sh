@@ -23,6 +23,7 @@ sed -i "/origin=/ s|%ORIGIN%|$src|" ./setup.sh
 [ ! -h README.md ] && ln -s HTMLSlideShowUtils/README.md ./
 [ ! -h Makefile ]  && ln -s HTMLSlideShowUtils/Makefile ./
 [ ! -h slides.md ] && ln -s demo/slides.md ./
+[ ! -h config.yaml ] && ln -s demo/config.yaml ./
 echo "done"
 
 echo -n "Checking dependencies..."

@@ -1,0 +1,11 @@
+# configuration options can be placed in the slides.md file, or
+# in a file named config.yaml. placing them here (in config.yaml) is
+# useful options that are shared among all slide shows.
+#
+# the --no-g option keeps rsync from trying to modify permissions on the remote
+extra-rsync-opts : --no-g
+# configu
+push:
+  user: remote username
+  host: remote hostname
+  root: rmote root directory

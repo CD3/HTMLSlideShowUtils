@@ -14,12 +14,13 @@ import config
 
 
 if __name__ == "__main__":
-  parser = argparse.ArgumentParser(description='Processes macros in text.')
-  parser.add_argument('param', help="Parameter name to return.")
-  parser.add_argument('--default', default=None, help="Default value.")
-  parser.add_argument('--file', default='slides.md', help="Slides file.")
+  parser = argparse.ArgumentParser(description='Retrieve configuration options.')
+  parser.add_argument('param', help="Parameter (option) name to return.")
+  parser.add_argument('--default'    , default=None         , help="Default value to return if parameter is not found.")
+  parser.add_argument('--slides-file', default='slides.md'  , help="Slides file to query for configuration options.")
+  parser.add_argument('--config-file', default='config.yaml', help="YAML configuration file to query for configuration options.")
 
   args = parser.parse_args()
 
-  val = config.get_config_param( args.param, args.default, args.file )
+  val = config.get_config_param( args.param, args.default, args.slides_file, args.config_file )
   print val
