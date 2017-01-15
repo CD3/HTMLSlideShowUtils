@@ -99,4 +99,4 @@ pdf2png:
 NAME?=NewPresentation
 new-show:
 	mkdir $(NAME)
-	cd $(NAME); ln -s ../Makefile; cp ../demo/slides.md ./
+	cd $(NAME); ln -s ../Makefile; ln -s ../config.yaml; cp ../demo/slides.md ./
