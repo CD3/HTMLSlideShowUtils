@@ -4,12 +4,15 @@ A collection of utilities for creating HTML slide shows from markdown using Pand
 
 ## Description
 
-`pandoc` can creating HTML slide shows from simple mardown files. This projects provides
-a `Makefile` and some simple scripts to make this easy and add some useful features. For
+`HTMLSlideShowUtils` is a collection of scripts that help automate the building and 
+deployment of HTML slides from a a Markdown file.
+It provides a `Makefile` and some simple scripts to make this easy and add some useful features.
 example, the `Makefile` supports pushing an HTML slide show to a remote server. To build
 and push a slide show, just run `make all`
+All of the tools needed to do this exist, this project simply provides some scripts to help streamline the process.
+Slides shows are build using `pandoc`, which support several different HTML slide show frameworks.
 
-The scripts also handle differences between the various slide show frameworks that pandoc
+The scripts also handle differences between the various slide show frameworks that `pandoc`
 can write to so that you can create slide shows in each format from the same Markdown without
 modification. Most of these differences have to deal with the css and javascript links. Some
 of the output formats reference remote links (slidy) while others expect a specific
@@ -17,7 +20,7 @@ directory structure with the needed files to be present (revealjs, slideous).
 
 ## Usage
 
-To get started, create a directory for your presentations, run the `setup.sh` in this directory,
+To get started, create a directory for your presentations, run the `setup.sh` script in this directory,
 and build the demo.
 
     > mkdir presentations
@@ -44,6 +47,11 @@ Or use the `new-show` target
     > cd myPres
     > make
 
+To update the utilities, simply run the `setup.sh` script in the presentations directory. This will automatically
+rerun the `setup.sh` script in the `HTMLSlideShowUtils` repo.
+
+    > cd presentations
+    > ./setup.sh
 ### Note
 The `Makefile` is compatible with [`live-edit`](https://github.com/CD3/live-edit). To
 automatically build and push your presentation on writes, edit the slides file with `live-edit`
