@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:CD3/macro_expander.git
+	branch = master
+	commit = d1ed7adea0c833e230bfe02c5111f8ce50a42abd
+	parent = 22dd1176431c52564b799c658205b2a257bf83f2
+	cmdver = 0.3.1
