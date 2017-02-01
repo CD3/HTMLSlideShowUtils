@@ -15,6 +15,7 @@ if __name__ == "__main__":
   args = parser.parse_args()
 
   local_modules = [ os.path.splitext( os.path.basename( fn ) )[0] for fn in args.file ]
+  local_modules.append('macro_expander')
 
   for fn in args.file:
     with open(fn,'r') as f:
