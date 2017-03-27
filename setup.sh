@@ -20,10 +20,10 @@ echo "DO NOT PUT ANYTHING IN THIS DIRECTORY YOU WANT TO KEEP" > demo/WARNING.txt
 echo "It will be erased if the setup script is ever run again" >> demo/WARNING.txt
 cp $src/setup.sh ./
 sed -i "/origin=/ s|%ORIGIN%|$src|" ./setup.sh
-[ ! -h README.md ] && ln -s HTMLSlideShowUtils/README.md ./
-[ ! -h Makefile ]  && ln -s HTMLSlideShowUtils/Makefile ./
-[ ! -h slides.md ] && ln -s demo/slides.md ./
-[ ! -h config.yaml ] && ln -s demo/config.yaml ./
+[ ! -e README.md ] && ln -s HTMLSlideShowUtils/README.md ./
+[ ! -e Makefile ]  && ln -s HTMLSlideShowUtils/Makefile ./
+[ ! -e slides.md ] && ln -s demo/slides.md ./
+[ ! -e config.yaml ] && ln -s demo/config.yaml ./
 echo "done"
 
 echo -n "Checking dependencies..."
