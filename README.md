@@ -5,7 +5,7 @@ A collection of utilities for creating HTML slide shows from markdown using Pand
 ## Description
 
 `HTMLSlideShowUtils` is a collection of scripts that help automate the building and 
-deployment of HTML slides from a a Markdown file.
+deployment of HTML slides from a Markdown file.
 It provides a `Makefile` and some simple scripts to make this easy and add some useful features.
 example, the `Makefile` supports pushing an HTML slide show to a remote server. To build
 and push a slide show, just run `make all`
@@ -14,7 +14,7 @@ Slides shows are build using `pandoc`, which support several different HTML slid
 
 The scripts also handle differences between the various slide show frameworks that `pandoc`
 can write to so that you can create slide shows in each format from the same Markdown without
-modification. Most of these differences have to deal with the css and javascript links. Some
+modification. Most of these differences have to deal with the CSS and javascript links. Some
 of the output formats reference remote links (slidy) while others expect a specific
 directory structure with the needed files to be present (revealjs, slideous).
 
@@ -65,7 +65,7 @@ then runs a series of commands that may modify this file. The modified file is t
 before `pandoc` is run. One of the preprocessing steps that will be performed is macro expansion.
 
 Macros follow the LaTeX command syntax: `\commandname[options]{arguments}`. The `expand-macros.py` script will read `slides-processed.md` and attempt to expand any macros that it
-find. Unrecognized macros are left in place. The script provides several useful macros.
+finds. Unrecognized macros are left in place. The script provides several useful macros.
 
 `\mathimg{latex snippet}`
 : Create an image file (png) from a LaTeX snippet and include the image in the slide. This macro uses [`tex2im`](https://github.com/CD3/tex2im) to create a png of the LaTeX snippet.
@@ -94,10 +94,16 @@ expansion in a file named `macros.py`. If this file exits, `expand-macros.py` wi
 
 The function should return a string that will replace the macro.
 The instance of the macro expansion class that is performing the macro expansion is passed into the first argument `self`. This gives you access to the members of the class, but is currently undocumented.
-However, you can use `self` to save state information between macro calls, for example to keep track of how many times the macro was expanded. The second and third argument will be lists that contain the
-contents of the square and curly brackets of the macro. Multiple `[]` and `{}` can be given, for example `\macroname[option1="true"][option2="true"]{argument}`. So opts[0] will be the contents of the first set of
-square brackets. The function that performs the macro expansion is responsible for parsing all options and arguments, so the example given could be implemented as `\macroname[option1="true",option2="true"]{argument}`, but
-the function that does the expansion would be responsible for parsing the ',' into two separate options.
+However, you can use `self` to save state information between macro calls, for
+example to keep track of how many times the macro was expanded. The second argument
+that contains the string found in square brackets and the third argument will be a list
+of the strings found in curly brackets (multiple curly brackets are possible, just as with LaTeX).
+The function that performs the
+macro expansion is responsible for parsing all options and arguments, so the
+example given could be implemented as
+`\macroname[option1="true",option2="true"]{argument}`, but the function that
+does the expansion would be responsible for parsing the ',' into two separate
+options.
 
 
 ## FAQ
