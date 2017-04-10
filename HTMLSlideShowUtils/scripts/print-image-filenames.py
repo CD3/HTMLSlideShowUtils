@@ -19,4 +19,5 @@ for fn in sys.argv[1:]:
 
 
   for fn in images:
-    print fn
+    if not fn.startswith('http'):
+      print fn
