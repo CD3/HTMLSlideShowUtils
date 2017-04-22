@@ -43,6 +43,7 @@ write you slides in a file named `slides.md`
     > make
 
 Or use the `new-show` target
+
     > make new-show NAME=myPres
     > cd myPres
     > make
@@ -52,7 +53,9 @@ rerun the `setup.sh` script in the `HTMLSlideShowUtils` repo.
 
     > cd presentations
     > ./setup.sh
+
 ### Note
+
 The `Makefile` is compatible with [`live-edit`](https://github.com/CD3/live-edit). To
 automatically build and push your presentation on writes, edit the slides file with `live-edit`
 
