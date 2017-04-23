@@ -18,6 +18,14 @@ modification. Most of these differences have to deal with the CSS and javascript
 of the output formats reference remote links (slidy) while others expect a specific
 directory structure with the needed files to be present (revealjs, slideous).
 
+## Installing
+
+`HTMLSlideShowUtils` does not require installation. When you run the setup script (see below)
+a local copy of the utilities directory is created so that this directory could be copied
+to another directory or computer and still run. However, the utility scripts require
+Pandoc and a few python modules to be installed. When the setup script runs (see below),
+it will try to detect any missing dependencies and tell you what needs to be installed.
+
 ## Usage
 
 To get started, create a directory for your presentations, run the `setup.sh` script in this directory,
