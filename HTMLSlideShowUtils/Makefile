@@ -16,6 +16,7 @@ TO=$(shell $(UTILSDIR)/scripts/get-config-param.py to --default slidy)
 
 EXTRAPANDOCOPTS?=$(shell $(UTILSDIR)/scripts/get-extra-pandoc-opts.py $(TO))
 EXTRARSYNCOPTS?=$(shell $(UTILSDIR)/scripts/get-config-param.py extra-rsync-opts --default '')
+PUSHCMD?=$(shell $(UTILSDIR)/scripts/get-config-param.py push/cmd --default 'rsync -avzP --delete $(EXTRARSYNCOPTS)')
 
 USER=$(shell $(UTILSDIR)/scripts/get-config-param.py push/user)
 HOST=$(shell $(UTILSDIR)/scripts/get-config-param.py push/host)
@@ -66,7 +67,7 @@ update-data:
 	cd $(UTILSDIR)/data/; ./update.sh
 
 push:
-	if [ -n "$(DEST)" ] ; then ssh $(NETLOC) "mkdir -p $(ROOT)/$(DEST)"; rsync -avzP --delete $(EXTRARSYNCOPTS) html/ $(PUSHURL); fi
+	if [ -n "$(DEST)" ] ; then ssh $(NETLOC) "mkdir -p $(ROOT)/$(DEST)"; $(PUSHCMD) html/ $(PUSHURL); fi
 
 clean:
 	rm -rf html
@@ -81,6 +82,7 @@ info:
 	@echo "             to: $(TO)"
 	@echo "ext pandoc opts: $(EXTRAPANDOCOPTS)"
 	@echo " ext rsync opts: $(EXTRARSYNCOPTS)"
+	@echo "       push/cmd: $(PUSHCMD)"
 	@echo "      push/user: $(USER)"
 	@echo "      push/host: $(HOST)"
 	@echo "      push/root: $(ROOT)"

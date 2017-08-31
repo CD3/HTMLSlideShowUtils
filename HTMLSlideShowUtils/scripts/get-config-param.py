@@ -23,4 +23,4 @@ if __name__ == "__main__":
   args = parser.parse_args()
 
   val = config.get_config_param( args.param, args.default, args.slides_file, args.config_file )
-  print val
+  print(val)

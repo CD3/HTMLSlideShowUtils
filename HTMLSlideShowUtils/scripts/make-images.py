@@ -42,7 +42,7 @@ for fn in args.file:
         continue
       else:
         with Image(filename=ifn) as img:
-          print "Creating",ofn,"from",ifn
+          print("Creating",ofn,"from",ifn)
           with img.clone() as nimg:
             width  = long(meta.width) if meta.width != 'W' else meta.width
             height = long(meta.height) if meta.height != 'H' else meta.height

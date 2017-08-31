@@ -37,5 +37,5 @@ if __name__ == "__main__":
     opts.append("--css %s_extra.css"%args.to)
     opts.append("--variable %s-url='./data'"%args.to)
 
-  print " ".join( opts )
+  print(" ".join( opts ))
 
