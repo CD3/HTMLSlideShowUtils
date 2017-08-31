@@ -1,4 +1,10 @@
-import os, re, subprocess, tempfile, urlparse, urllib, base64, hashlib
+import sys, os, re, subprocess, tempfile
+import urllib, base64, hashlib
+
+if sys.version_info[0] == 3:
+    import urllib.parse as urlparse
+else:
+    import urlparse
 
 def example(self,args,opts):
   '''Macro handlers will be passed three argument
@@ -25,23 +31,23 @@ def mathimg(self,args,opts):
 
 
   cmd = "tex2im -o %%s %s -- '%s' "%(extra_opts,args[0])
-  print '%s'%cmd
+  print('%s'%cmd)
   # create a hash of the command used to create the image to use as the image
   # name. this way we can tell if the image has already been created before.
-  hash = hashlib.sha1(cmd).hexdigest()
+  hash = hashlib.sha1(cmd.encode('utf-8')).hexdigest()
   ofn = "mathimg-%s-image.png"%hash
   lfn = "mathimg-%s-image.log"%hash
   cmd = cmd%ofn
-  print "creating image with:'"+cmd+"'"
+  print("creating image with:'"+cmd+"'")
   if os.path.exists(ofn):
-    print "\tskipping because '"+ofn+"' already exists. please delete it if you want to force a rebuild."
+    print("\tskipping because '"+ofn+"' already exists. please delete it if you want to force a rebuild.")
   else:
     with open(lfn,'w') as f:
       status = subprocess.call(cmd,shell=True,stdout=f,stderr=f)
       if status != 0:
-        print "\tWARNING: there was a problem running tex2im."
-        print "\tWARNING: command output was left in %s"%(lfn)
-        print "\tWARNING: replacing with $...$, which may not work..."
+        print("\tWARNING: there was a problem running tex2im.")
+        print("\tWARNING: command output was left in %s"%(lfn))
+        print("\tWARNING: replacing with $...$, which may not work...")
         return "$"+args[0]+"$"
 
   if 'o' in options:
@@ -63,7 +69,7 @@ def scriptimg(self,args,opts):
 
 
   text = re.sub( "^\s*#!","#!",args[0] ) # strip off any whitespace before the shebang
-  hash = hashlib.sha1(text).hexdigest()
+  hash = hashlib.sha1(text.encode('utf-8')).hexdigest()
 
   sfn = "scriptimg-%s-script.txt"%hash
   ofn = "scriptimg-%s-image.png"%hash
@@ -73,12 +79,12 @@ def scriptimg(self,args,opts):
     f.write(text)
 
   cmd = "chmod +x %s; ./%s; mv out.png %s"%(sfn,sfn,ofn)
-  print "creating image from script with:'"+cmd+"'"
+  print("creating image from script with:'"+cmd+"'")
   with open(lfn,'w') as f:
     status = subprocess.call(cmd,shell=True,stdout=f,stderr=f)
     if status != 0:
-      print "\tWARNING: there was a problem running script."
-      print "\tWARNING: the script and its output were left in %s and %s"%(sfn,lfn)
+      print("\tWARNING: there was a problem running script.")
+      print("\tWARNING: the script and its output were left in %s and %s"%(sfn,lfn))
       return "ERROR: could not create image"
 
 
@@ -166,8 +172,8 @@ def write(self,args,opts):
       fn = options['filename']
 
   if fn is None:
-    print "\tWARNING: no filename found in write macro."
-    print '\tWARNING: please specify a filename in the macro options with [filename="NAME"], where NAME is the name of the file to write.'
+    print("\tWARNING: no filename found in write macro.")
+    print('\tWARNING: please specify a filename in the macro options with [filename="NAME"], where NAME is the name of the file to write.')
     return None
 
   with open(fn,'w') as f:

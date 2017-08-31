@@ -1,7 +1,7 @@
 '''Preprocess a markdown file by doing macro expansion an other things.'''
 
 # standard modules
-import sys, inspect
+import os, sys, inspect
 import pprint
 
 # non-standard modules
@@ -15,6 +15,8 @@ try:
   del sys.modules['macros']
 except:
   pass
+
+sys.path.append(os.path.dirname(__file__))
 
 import our_macros
 
