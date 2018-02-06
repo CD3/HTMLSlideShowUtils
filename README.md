@@ -4,13 +4,14 @@ A collection of utilities for creating HTML slide shows from markdown using Pand
 
 ## Description
 
-`HTMLSlideShowUtils` is a collection of scripts that help automate the building and 
-deployment of HTML slides from a Markdown file.
-It provides a `Makefile` and some simple scripts to make this easy and add some useful features.
-example, the `Makefile` supports pushing an HTML slide show to a remote server. To build
-and push a slide show, just run `make all`
-All of the tools needed to do this exist, this project simply provides some scripts to help streamline the process.
-Slides shows are build using `pandoc`, which support several different HTML slide show frameworks.
+`HTMLSlideShowUtils` is a collection of scripts that help automate the building
+and deployment of HTML slides from a Markdown file.  It provides a `Makefile`
+and some simple scripts to make this easy and add some useful features.  For
+example, the `Makefile` supports pushing an HTML slide show to a remote server.
+To build and push a slide show, just run `make all` All of the tools needed to
+do this exist, this project simply provides some scripts to help streamline the
+process.  Slide shows are build using `pandoc`, which support several
+different HTML slide show frameworks.
 
 The scripts also handle differences between the various slide show frameworks that `pandoc`
 can write to so that you can create slide shows in each format from the same Markdown without
@@ -103,15 +104,16 @@ expansion in a file named `macros.py`. If this file exits, `expand-macros.py` wi
    return str
 ```
 
-The function should return a string that will replace the macro.
-The instance of the macro expansion class that is performing the macro expansion is passed into the first argument `self`. This gives you access to the members of the class, but is currently undocumented.
-However, you can use `self` to save state information between macro calls, for
-example to keep track of how many times the macro was expanded. The second argument
-that contains the string found in square brackets and the third argument will be a list
-of the strings found in curly brackets (multiple curly brackets are possible, just as with LaTeX).
-The function that performs the
-macro expansion is responsible for parsing all options and arguments, so the
-example given could be implemented as
+The function should return a string that will replace the macro.  The instance
+of the macro expansion class that is performing the macro expansion is passed
+into the first argument `self`. This gives you access to the members of the
+class, but is currently undocumented.  However, you can use `self` to save
+state information between macro calls, for example to keep track of how many
+times the macro was expanded. The second argument that contains the string
+found in square brackets and the third argument will be a list of the strings
+found in curly brackets (multiple curly brackets are possible, just as with
+LaTeX).  The function that performs the macro expansion is responsible for
+parsing all options and arguments, so the example given could be implemented as
 `\macroname[option1="true",option2="true"]{argument}`, but the function that
 does the expansion would be responsible for parsing the ',' into two separate
 options.
@@ -121,11 +123,11 @@ options.
 
 ### Why is this better than PowerPoint?
 
-Honestly, for most people it isn't.
-Before this, I was using PowerPoint,
-and do not really have a problem with anything PowerPoint does in terms of creating and giving a presentation.
-It is even possible to get true LaTeX support with the IguanaTex add-in, and I certainly like it better
-than the OpenOffice/LiebreOffice presentation software.
+Honestly, for most people it isn't.  Before this, I was using PowerPoint, and
+do not really have a problem with anything PowerPoint does in terms of creating
+and giving a presentation.  It is even possible to get true LaTeX support with
+the IguanaTex add-in, and I certainly like it better than the
+OpenOffice/LiebreOffice presentation software.
 
 This project grew out of a frustration with editing presentations. Specifically the fact that *all* editing must
 go through the PowerPoint interface. So, if I want to make a change to a presentation, I have to have a copy of
