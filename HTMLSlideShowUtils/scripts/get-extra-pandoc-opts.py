@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/env python
 '''Prints a set of command line options to pass to pandoc for a given file.'''
 
 # standard modules

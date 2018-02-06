@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/env python
 '''Parses markdown file for images with size specification in the filename and creates them.'''
 
 # standard modules

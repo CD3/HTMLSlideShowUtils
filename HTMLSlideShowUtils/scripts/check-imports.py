@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/env python
 '''Get configuration parameters.'''
 
 # standard modules
