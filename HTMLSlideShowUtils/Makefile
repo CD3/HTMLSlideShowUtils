@@ -14,7 +14,6 @@ TO?=slidy
 ifneq ($(strip $(UTILSDIR)),COULD_NOT_FIND_UTILS_DIR)
 TO=$(shell $(UTILSDIR)/scripts/get-config-param.py to --default slidy)
 
-EXTRAPANDOCOPTS?=$(shell $(UTILSDIR)/scripts/get-extra-pandoc-opts.py $(TO))
 EXTRARSYNCOPTS?=$(shell $(UTILSDIR)/scripts/get-config-param.py extra-rsync-opts --default '')
 PUSHCMD?=$(shell $(UTILSDIR)/scripts/get-config-param.py push/cmd --default 'rsync -avzP --delete $(EXTRARSYNCOPTS)')
 
@@ -41,13 +40,7 @@ slides:
 	$(UTILSDIR)/scripts/expand-macros.py slides-processed.md slides-processed.md
 	$(UTILSDIR)/scripts/make-images.py -s slides-processed.md
 	mkdir -p html
-	@#
-	@# we are using pandoc to do the conversion from markdown to html here.
-	@# note: --self-contained does not work with mathjax
-	@# --standalone creates a file with header and footer
-	@# --mathjax uses mathjax javascript to render latex equation. requires an internet connection
-	@# --to is the format that will be written to
-	pandoc slides-processed.md -o html/00-slides.html --standalone --mathjax --to $(TO) $(EXTRAPANDOCOPTS)
+	$(UTILSDIR)/scripts/build-slideshow.py slides-processed.md html/00-slides.html
 	for file in $$($(UTILSDIR)/scripts/print-image-filenames.py slides-processed.md); do cp $$file html; done
 	@if [ ! -d $(UTILSDIR)/data/$(TO) ]; then echo; echo; echo "ERROR: No data directory found for $(TO). Please run 'make update-data' and rerun."; echo; echo; fi
 	cp -r $(UTILSDIR)/data/$(TO) html/data
@@ -80,7 +73,6 @@ update: all
 info:
 	@echo "      utils dir: $(UTILSDIR)"
 	@echo "             to: $(TO)"
-	@echo "ext pandoc opts: $(EXTRAPANDOCOPTS)"
 	@echo " ext rsync opts: $(EXTRARSYNCOPTS)"
 	@echo "       push/cmd: $(PUSHCMD)"
 	@echo "      push/user: $(USER)"
