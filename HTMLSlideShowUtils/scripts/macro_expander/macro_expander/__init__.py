@@ -21,7 +21,6 @@ sys.path.append(os.path.dirname(__file__))
 import our_macros
 
 
-
 class MacroProcessor(object):
   def __init__(self):
     # define macro grammer
@@ -70,7 +69,7 @@ class MacroProcessor(object):
     # Order matters here. The first handler found will be used. Handlers are
     # looked for in:
     # 1. the user macros.py file.
-    # 2. the added_mas,a,o : Noneros member (macro handlers added with the addMacro method)
+    # 2. the added_macros member (macro handlers added with the addMacro method)
     # 3. our macros.py file
     handler = lambda x,y,z : None
     if 'user_macros' in sys.modules and hasattr(user_macros,name):
@@ -100,7 +99,7 @@ class MacroProcessor(object):
 
 
     key = Word(alphas, alphanums+'_')
-    val = QuotedString(quoteChar='"') | QuotedString(quoteChar="'")
+    val = QuotedString(quoteChar='"') | QuotedString(quoteChar="'") | QuotedString(quoteChar="/",unquoteResults=False) | QuotedString(quoteChar="|",unquoteResults=False) | Word(alphanums)
     opt = key("key") + Optional("=" + val("val"))
 
 
