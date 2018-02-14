@@ -99,14 +99,23 @@ class MacroProcessor(object):
 
 
     key = Word(alphas, alphanums+'_')
-    val = QuotedString(quoteChar='"') | QuotedString(quoteChar="'") | QuotedString(quoteChar="/",unquoteResults=False) | QuotedString(quoteChar="|",unquoteResults=False) | Word(alphanums)
+    val = QuotedString(quoteChar='"') | QuotedString(quoteChar="'") | Word(alphanums+"/|()_")
     opt = key("key") + Optional("=" + val("val"))
 
 
     options = dict()
     for o in opt.searchString( opts_str ):
       if 'val' in o:
-        options[o['key']] = o['val']
+        if not o['key'] in options:
+          options[o['key']] = o['val']
+        else:
+          if not isinstance(options[o['key']],list):
+            tmp = options[o['key']]
+            options[o['key']] = list()
+            options[o['key']].append(tmp)
+
+          options[o['key']].append(o['val'])
+
       else:
         options[o['key']] = True
 
