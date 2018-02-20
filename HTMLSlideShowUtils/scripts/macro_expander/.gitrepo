@@ -6,6 +6,6 @@
 [subrepo]
 	remote = https://github.com/CD3/macro_expander
 	branch = master
-	commit = a0c7cb9018956084e12b4ea66a640ec54bfd804b
-	parent = 238186921f40cb95a34c6085a91d2b54eb7a4bed
+	commit = 366f3e183c66b151b66b7dfedd7bf1e6eb94ec2d
+	parent = 0777e56428d2fb4e11af8eb72815d5e37edfb8e1
 	cmdver = 0.3.1
