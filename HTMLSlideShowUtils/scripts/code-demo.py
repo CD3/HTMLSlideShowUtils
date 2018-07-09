@@ -31,9 +31,15 @@ parser.add_argument("-n", "--demo-name",
                     default=[],
                     help="Demo section names to ouptut.",)
 
-parser.add_argument("-l", "--list-section-names",
+parser.add_argument("-l","--language",
+                    action="store",
+                    default="",
+                    help="The language used in the source. This will be added to the code block that is generated to support syntax highlighting..",)
+
+parser.add_argument( "--list-section-names",
                     action="store_true",
                     help="List the section names that were found.",)
+
 
 
 args = parser.parse_args()
@@ -120,7 +126,7 @@ class Demo:
 
       if len(source) > 0:
         lines.append("Code:")
-        lines.append("```")
+        lines.append("```{0}".format(args.language))
         lines += source
         lines.append("```")
       
@@ -144,7 +150,8 @@ for file in args.source:
     demo.parse(f,'source')
 
 for exe in args.executable:
-  demo.parse( subprocess.check_output(exe).decode('utf-8').split("\n"), 'output' )
+  result = subprocess.run(exe,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+  demo.parse( result.stdout.decode('utf-8').split("\n"), 'output' )
 
 names = args.demo_name
 if len(names) == 1 and names[0].lower() == "all":
