@@ -151,6 +151,9 @@ for file in args.source:
 
 for exe in args.executable:
   result = subprocess.run(exe,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+  if result.returncode != 0:
+    print("WARNING: executable returned an error.")
+    print("\n".join( "WARNING: "+line for line in result.stdout.decode('utf-8').split("\n")) )
   demo.parse( result.stdout.decode('utf-8').split("\n"), 'output' )
 
 names = args.demo_name
