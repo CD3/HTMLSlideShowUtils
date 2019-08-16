@@ -16,6 +16,7 @@ TO=$(shell $(UTILSDIR)/scripts/get-config-param.py to --default slidy)
 
 EXTRARSYNCOPTS?=$(shell $(UTILSDIR)/scripts/get-config-param.py extra-rsync-opts --default '')
 PUSHCMD?=$(shell $(UTILSDIR)/scripts/get-config-param.py push/cmd --default 'rsync -avzP --delete $(EXTRARSYNCOPTS)')
+PANDOCCMD?=$(shell $(UTILSDIR)/scripts/get-config-param.py pandoc/cmd --default 'pandoc')
 
 USER=$(shell $(UTILSDIR)/scripts/get-config-param.py push/user)
 HOST=$(shell $(UTILSDIR)/scripts/get-config-param.py push/host)
@@ -53,7 +54,7 @@ document:
 	if [ -x ./preprocessor ]; then  ./preprocessor; fi
 	$(UTILSDIR)/scripts/expand-macros.py slides-processed.md slides-processed.md
 	$(UTILSDIR)/scripts/make-images.py -s slides-processed.md
-	pandoc document-processed.md -o document.pdf
+	$(PANDOCCMD) document-processed.md -o document.pdf
 	if [ -x ./postprocessor ]; then  ./postprocessor; fi
 
 update-data:
@@ -74,6 +75,7 @@ info:
 	@echo "      utils dir: $(UTILSDIR)"
 	@echo "             to: $(TO)"
 	@echo " ext rsync opts: $(EXTRARSYNCOPTS)"
+	@echo "     pandoc/cmd: $(PANDOCCMD)"
 	@echo "       push/cmd: $(PUSHCMD)"
 	@echo "      push/user: $(USER)"
 	@echo "      push/host: $(HOST)"
