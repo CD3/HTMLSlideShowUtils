@@ -1,4 +1,4 @@
 [submodule "HTMLSlideShowUtils/scripts/externals/macro_expander"]
 	path = HTMLSlideShowUtils/scripts/externals/macro_expander
 	url = ../macro_expander.git
-	branch = v0.1
+	branch = v0.2
