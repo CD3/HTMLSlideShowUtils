@@ -1,5 +1,6 @@
 #! /bin/bash
 
+set -e
 mkdir $0.d
 cd $0.d
 ../../setup.sh

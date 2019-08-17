@@ -12,17 +12,18 @@ endif
 
 TO?=slidy
 ifneq ($(strip $(UTILSDIR)),COULD_NOT_FIND_UTILS_DIR)
-TO=$(shell $(UTILSDIR)/scripts/get-config-param.py to --default slidy)
+TO=$(shell $(PYTHON3CMD) $(UTILSDIR)/scripts/get-config-param.py to --default slidy)
 
-EXTRARSYNCOPTS?=$(shell $(UTILSDIR)/scripts/get-config-param.py extra-rsync-opts --default '')
-PUSHCMD?=$(shell $(UTILSDIR)/scripts/get-config-param.py push/cmd --default 'rsync -avzP --delete $(EXTRARSYNCOPTS)')
-PANDOCCMD?=$(shell $(UTILSDIR)/scripts/get-config-param.py pandoc/cmd --default 'pandoc')
+EXTRARSYNCOPTS?=$(shell $(PYTHON3CMD) $(UTILSDIR)/scripts/get-config-param.py extra-rsync-opts --default '')
+PUSHCMD?=$(shell $(PYTHON3CMD) $(UTILSDIR)/scripts/get-config-param.py push/cmd --default 'rsync -avzP --delete $(EXTRARSYNCOPTS)')
+PANDOCCMD?=$(shell $(PYTHON3CMD) $(UTILSDIR)/scripts/get-config-param.py pandoc/cmd --default 'pandoc')
+PYTHON3CMD?=python3
 
-USER=$(shell $(UTILSDIR)/scripts/get-config-param.py push/user)
-HOST=$(shell $(UTILSDIR)/scripts/get-config-param.py push/host)
-ROOT=$(shell $(UTILSDIR)/scripts/get-config-param.py push/root)
-DEST=$(shell $(UTILSDIR)/scripts/get-config-param.py push/dest)
-NETLOC=$(shell $(UTILSDIR)/scripts/get-config-param.py push/netloc)
+USER=$(shell $(PYTHON3CMD) $(UTILSDIR)/scripts/get-config-param.py push/user)
+HOST=$(shell $(PYTHON3CMD) $(UTILSDIR)/scripts/get-config-param.py push/host)
+ROOT=$(shell $(PYTHON3CMD) $(UTILSDIR)/scripts/get-config-param.py push/root)
+DEST=$(shell $(PYTHON3CMD) $(UTILSDIR)/scripts/get-config-param.py push/dest)
+NETLOC=$(shell $(PYTHON3CMD) $(UTILSDIR)/scripts/get-config-param.py push/netloc)
 endif
 
 ifeq ($(NETLOC),None)
@@ -38,11 +39,10 @@ slides:
 	rm -rf html
 	cp slides.md slides-processed.md
 	if [ -x ./preprocessor ]; then  ./preprocessor; fi
-	$(UTILSDIR)/scripts/expand-macros.py slides-processed.md slides-processed.md
-	$(UTILSDIR)/scripts/make-images.py -s slides-processed.md
+	$(PYTHON3CMD) $(UTILSDIR)/scripts/expand-macros.py slides-processed.md slides-processed.md
 	mkdir -p html
-	$(UTILSDIR)/scripts/build-slideshow.py slides-processed.md html/00-slides.html
-	for file in $$($(UTILSDIR)/scripts/print-image-filenames.py slides-processed.md); do cp $$file html; done
+	$(PYTHON3CMD) $(UTILSDIR)/scripts/build-slideshow.py slides-processed.md html/00-slides.html
+	for file in $$($(PYTHON3CMD) $(UTILSDIR)/scripts/print-image-filenames.py slides-processed.md); do cp $$file html; done
 	@if [ ! -d $(UTILSDIR)/data/$(TO) ]; then echo; echo; echo "ERROR: No data directory found for $(TO). Please run 'make update-data' and rerun."; echo; echo; fi
 	cp -r $(UTILSDIR)/data/$(TO) html/data
 	if [ -x ./postprocessor ]; then  ./postprocessor; fi
@@ -52,8 +52,8 @@ slides:
 document:
 	cp document.md document-processed.md
 	if [ -x ./preprocessor ]; then  ./preprocessor; fi
-	$(UTILSDIR)/scripts/expand-macros.py slides-processed.md slides-processed.md
-	$(UTILSDIR)/scripts/make-images.py -s slides-processed.md
+	$(PYTHON3CMD) $(UTILSDIR)/scripts/expand-macros.py slides-processed.md slides-processed.md
+	$(PYTHON3CMD) $(UTILSDIR)/scripts/make-images.py -s slides-processed.md
 	$(PANDOCCMD) document-processed.md -o document.pdf
 	if [ -x ./postprocessor ]; then  ./postprocessor; fi
 

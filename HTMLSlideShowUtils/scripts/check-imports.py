@@ -1,8 +1,8 @@
-#! /usr/bin/env python2
+#! /usr/bin/env python3
 '''Get configuration parameters.'''
 
 # standard modules
-import re, argparse, importlib, os
+import re, argparse, importlib, os, pathlib
 
 
 
@@ -18,8 +18,7 @@ if __name__ == "__main__":
   local_modules.append('macro_expander')
 
   for fn in args.file:
-    with open(fn,'r') as f:
-      text = f.read()
+    text = pathlib.Path(fn).read_text()
 
     for line in text.split('\n'):
       modules = []

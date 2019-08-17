@@ -1,4 +1,4 @@
-#! /usr/bin/env python2
+#! /usr/bin/env python3
 
 import subprocess, sys, os
 from argparse import ArgumentParser
@@ -101,8 +101,8 @@ if __name__ == "__main__":
       odir = "."
     cmd = cmd.format(INPUT=args.input_file,OUTPUTDIR=odir,TO=args.to_format)
 
-  print "build cmd:",cmd
-  print subprocess.check_output(cmd,shell=True)
+  print("build cmd:",cmd)
+  print( subprocess.check_output(cmd,shell=True))
 
 
 
